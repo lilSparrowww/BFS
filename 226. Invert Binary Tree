@@ -1,0 +1,144 @@
+# 226. Invert Binary Tree
+
+## 🧩 Problem
+Given the root of a binary tree, invert the tree.
+
+Inverting means:
+For every node, swap its left and right children.
+
+---
+
+## 📌 Example
+
+Input:
+        4
+      /   \
+     2     7
+    / \   / \
+   1   3 6   9
+
+Output:
+        4
+      /   \
+     7     2
+    / \   / \
+   9   6 3   1
+
+---
+
+## 🔎 Key Idea
+
+This is a simple traversal problem.
+
+At every node:
+    swap(node.left, node.right)
+
+We must visit every node exactly once.
+
+---
+
+# 🚀 Approach 1: BFS (Level Order Traversal)
+
+### Intuition
+Use a queue.
+Traverse level by level.
+At each node:
+    1. Swap children
+    2. Add children to queue
+
+---
+
+## ✅ Java Code (BFS)
+
+```java
+import java.util.*;
+
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+
+        if (root == null) {
+            return null;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+
+            TreeNode current = queue.poll();
+
+            // Swap left and right
+            TreeNode temp = current.left;
+            current.left = current.right;
+            current.right = temp;
+
+            if (current.left != null) {
+                queue.offer(current.left);
+            }
+
+            if (current.right != null) {
+                queue.offer(current.right);
+            }
+        }
+
+        return root;
+    }
+}
+```
+
+---
+
+# 🧠 Approach 2: DFS (Recursive)
+
+### Intuition
+1. Recursively invert left subtree
+2. Recursively invert right subtree
+3. Swap them
+
+---
+
+## ✅ Java Code (DFS)
+
+```java
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+
+        if (root == null) {
+            return null;
+        }
+
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+
+        root.left = right;
+        root.right = left;
+
+        return root;
+    }
+}
+```
+
+---
+
+# ⏱ Complexity
+
+Time Complexity: O(n)  
+Space Complexity:
+- BFS → O(n)
+- DFS → O(h) (recursion stack)
+
+Where:
+n = number of nodes  
+h = height of tree  
+
+---
+
+# 🎯 Final Takeaway
+
+This problem tests:
+- Tree traversal
+- Swapping references
+- BFS vs DFS understanding
+
+Core logic:
+Visit every node once and swap its children.
