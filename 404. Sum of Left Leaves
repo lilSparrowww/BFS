@@ -1,0 +1,126 @@
+# 404. Sum of Left Leaves (BFS - Java)
+
+## 🧩 Problem
+Given the root of a binary tree, return the sum of all left leaves.
+
+### 📌 Definition
+A **left leaf** is:
+- A leaf node (no left and right child)
+- AND it is the left child of its parent
+
+If it is a leaf but a right child → ❌ do not count it.
+
+---
+
+## 🔎 Key Idea (BFS Approach)
+
+We perform level-order traversal using a queue.
+
+At each node:
+1. Check if its left child exists.
+2. If left child is a leaf → add its value to sum.
+3. Otherwise → push it into queue.
+4. Always push right child (if exists) to continue traversal.
+
+---
+
+## 🚀 Algorithm Steps
+
+1. If root is null → return 0.
+2. Create a queue and add root.
+3. While queue is not empty:
+   - Remove current node.
+   - If left child exists:
+       - If it is a leaf → add to sum.
+       - Else → add it to queue.
+   - If right child exists → add to queue.
+4. Return sum.
+
+---
+
+## ✅ Java Code (BFS)
+
+```java
+import java.util.*;
+
+class Solution {
+    public int sumOfLeftLeaves(TreeNode root) {
+
+        if (root == null) {
+            return 0;
+        }
+
+        int sum = 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+
+            TreeNode current = queue.poll();
+
+            // Check left child
+            if (current.left != null) {
+
+                // If left child is a leaf
+                if (current.left.left == null && current.left.right == null) {
+                    sum += current.left.val;
+                } else {
+                    queue.offer(current.left);
+                }
+            }
+
+            // Always process right subtree
+            if (current.right != null) {
+                queue.offer(current.right);
+            }
+        }
+
+        return sum;
+    }
+}
+```
+
+---
+
+## 🧠 Why Do We Add Right Child?
+
+Even though we only count left leaves,
+we must traverse the entire tree.
+
+If we skip adding right child,
+we may miss left leaves inside the right subtree.
+
+Example:
+        3
+       / \
+      9  20
+         /
+        15
+
+Left leaves = 9 + 15 = 24
+
+If we skip right subtree,
+we would miss 15.
+
+---
+
+## ⏱ Complexity
+
+Time Complexity: O(n)  
+Space Complexity: O(n)  
+
+Where n = number of nodes in the tree.
+
+---
+
+## 🎯 Final Takeaway
+
+Traversal logic and condition logic are separate.
+
+Traversal:
+    Visit every node using BFS.
+
+Condition:
+    Only add value if it is a left leaf.
+
+Never mix these two responsibilities.
